@@ -1,100 +1,34 @@
-//Створити одновимірний масив, 
-//кількість елементів якого задана користувачем.
-// Визначити максимальне та мінімальне значення
-// серед елементів із парними та непарними номерами.
-
-//Пошук форми в html
-const form = document.querySelector('#form');
-
-//функція рендомного формування числа -передаєм мінімум та максимум - генерується число від 0 до 1 берем мін та макс та округлюємо
-const getRandomNumber = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+// Функція для створення об'єкту товару з унікальним ідентифікатором та виклику колбеку
+function createProduct(obj, callback) {
+    const id = generateUniqueId(); // Генеруємо унікальний ідентифікатор
+    const product = { ...obj, id }; // Створюємо об'єкт товару з новим ідентифікатором
+    callback(product); // Викликаємо колбек та передаємо створений об'єкт
 }
 
-// Створення масиву та повернення його - перебираємо з нуля(0 індекс масиву), по введенне число користувача
-const createArray = (formData) => {
-    const arr = [];
-    for (let i = 0; i < formData.number; i++) {
-        arr.push(getRandomNumber(formData.min, formData.max));
-    }
-    return arr;
+// Функція для генерації унікального ідентифікатора
+function generateUniqueId() {
+    return Math.random().toString(36).slice(2, 9); // Генеруємо рандомний рядок
 }
 
-//функія пошуку  максимальног та мінімальног значення
-// серед елементів із парними та непарними номерами.
-const findValue = (array) => {
-    let minEven = Infinity;
-    let maxEven = -Infinity;
-    let minOdd = Infinity;
-    let maxOdd = -Infinity;
-    let minEvenIndex = Infinity;
-    let maxEvenIndex = -Infinity;
-    let minOddIndex = Infinity;
-    let maxOddIndex = -Infinity;
-   
-    // Перегляд масиву та знаходження мінімального та максимального значень для парних та непарних індексів
-    for (let i = 0; i < array.length; i++) {
-        if (i % 2) {// Непарний індекс
-            
-            if (array[i] < minOdd) {
-                minOdd = array[i];
-                minOddIndex= i
-            }
-            if (array[i] > maxOdd) {
-                maxOdd = array[i];
-                maxOddIndex = i
-            }
-        } else {// Перевірка на парний індекс
-            if (array[i] < minEven) {
-                minEven = array[i];
-                minEvenIndex = i
-            }
-            if (array[i] > maxEven) {
-                maxEven = array[i];
-                maxEvenIndex = i
-            }
-        }
-    }
-    //повернення обєкта для відображення
-    return ({
-        [`min value even index № ${minEvenIndex}`]: minEven,
-        [`max value even index № ${maxEvenIndex}`]: maxEven,
-        [`min value odd index № ${minOddIndex}`]: minOdd,
-        [`max value odd index № ${maxOddIndex}`]: maxOdd
-    })
+// Колбек для логування об'єкту продукту
+function logProduct(product) {
+    console.log("Product:", product);
 }
 
-// рендер масивів
-const render = (value) => {
-    //пошук елемента для вставки
-    const root = document.querySelector('#root')
-    //вставка перебором
-    const arr = Object.entries(value)
-    root.insertAdjacentHTML('beforeend', `<ul>
-    ${arr.map(item => (
-        `<li>${item[0]}: ${item[1]}</li>`
-    )).join('')}
-    </ul>`)
+// Колбек для логування загальної вартості товару
+function logTotalPrice(product) {
+    const totalPrice = product.price * product.quantity; // Розраховуємо загальну вартість товару
+    console.log("Total price:", totalPrice);
 }
 
-//додаємо слухач на форму
-form.addEventListener('submit', (e) => {
-    //забораняємо дефолтну поведінку браузера
-    e.preventDefault();
-    const inputs = form.querySelectorAll('input');
-    //створюємо обєкт методом редус
-    const formData = [...inputs].reduce((acc, cur) => {
-        if (cur.name) {
-            acc[cur.name] = +cur.value;
-            return acc
-        }
-        return acc
-    }, {});
-    
-    //виклик функції створення масиву
-    const arr = createArray(formData)
-    //пошук значень
-    const value = findValue(arr)
-     // Виведення обєкту
-    render(value)
-})
+// Приклад використання:
+
+const myProduct = {
+    name: "Example Product",
+    price: 20,
+    quantity: 3
+};
+
+// Створення продукту з унікальним ідентифікатором та виклик колбеків для логування
+createProduct(myProduct, logProduct);
+createProduct(myProduct, logTotalPrice);
