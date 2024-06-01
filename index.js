@@ -1,34 +1,69 @@
-// Функція для створення об'єкту товару з унікальним ідентифікатором та виклику колбеку
-function createProduct(obj, callback) {
-    const id = generateUniqueId(); // Генеруємо унікальний ідентифікатор
-    const product = { ...obj, id }; // Створюємо об'єкт товару з новим ідентифікатором
-    callback(product); // Викликаємо колбек та передаємо створений об'єкт
-}
+// class Client {
+//     #login;
+//     #email;
 
-// Функція для генерації унікального ідентифікатора
-function generateUniqueId() {
-    return Math.random().toString(36).slice(2, 9); // Генеруємо рандомний рядок
-}
+//     constructor(login, email) {
+//         this.#login = login;
+//         this.#email = email;
+//     }
 
-// Колбек для логування об'єкту продукту
-function logProduct(product) {
-    console.log("Product:", product);
-}
+//     // Геттер для отримання значення login
+//     getLogin() {
+//         return this.#login;
+//     }
 
-// Колбек для логування загальної вартості товару
-function logTotalPrice(product) {
-    const totalPrice = product.price * product.quantity; // Розраховуємо загальну вартість товару
-    console.log("Total price:", totalPrice);
+//     // Сеттер для встановлення значення login
+//     setLogin(newLogin) {
+//         this.#login = newLogin;
+//     }
+
+//     // Геттер для отримання значення email
+//     getEmail() {
+//         return this.#email;
+//     }
+
+//     // Сеттер для встановлення значення email
+//     setEmail(newEmail) {
+//         this.#email = newEmail;
+//     }
+// }
+//створення класу в завданні через #, але вірно через _ https://learn.javascript.ru/property-accessors 
+class Client {
+    _login;
+    _email;
+    //конструктор
+    constructor(login, email) {
+        this._login = login;
+        this._email = email;
+    }
+
+    // Геттер для отримання значення login
+    getLogin() {
+        return this._login;
+    }
+
+    // Сеттер для встановлення значення login
+    setLogin(newLogin) {
+        this._login = newLogin;
+    }
+
+    // Геттер для отримання значення email
+    getEmail() {
+        return this._email;
+    }
+
+    // Сеттер для встановлення значення email
+    setEmail(newEmail) {
+        this._email = newEmail;
+    }
 }
 
 // Приклад використання:
+const client = new Client("user123", "user@example.com");
+console.log("Login:", client.getLogin());
+console.log("Email:", client.getEmail());
+client.setLogin("newUser123");
+client.setEmail("newuser@example.com");
 
-const myProduct = {
-    name: "Example Product",
-    price: 20,
-    quantity: 3
-};
-
-// Створення продукту з унікальним ідентифікатором та виклик колбеків для логування
-createProduct(myProduct, logProduct);
-createProduct(myProduct, logTotalPrice);
+console.log("Updated Login:", client.getLogin());
+console.log("Updated Email:", client.getEmail());
